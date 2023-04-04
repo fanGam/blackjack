@@ -37,6 +37,18 @@ struct Holder {
 
 typedef Holder* Hold;
 
+struct ChanseFor {
+	int eightteen;
+	int nineteen;
+	int twenty;
+	int twentyone;
+	int more;
+	int less;
+	int all;
+};
+
+typedef ChanseFor* Calc;
+
 void HolderInic(Hold& a) {
 	a = new Holder;
 	Hold b = a, c;
@@ -114,10 +126,9 @@ void ClearHolder(Hold a) {
 }
 
 int GetLen(takes a) {
-	takes b = a;
 	int i = 0;
-	while (b != NULL) {
-		b = b->Next;
+	while (a != NULL) {
+		a = a->Next;
 		i++;
 	}
 	return i;
@@ -128,92 +139,52 @@ void ShowCards(takes a) {
 	int Len = GetLen(a);
 
 	for (int i = 0; i < Len; i++) {
-		for (int j = 0; j < 10; j++) {
-			cout << '_';
-		}
-		cout << "   ";
+		cout << "_________" << "   ";
 	}
+	cout << endl;
 
 	for (int i = 0; i < Len; i++) {
-		cout << '|';
-		for (int j = 0; j < 8; j++) {
-			cout << ' ';
-		}
-		cout << "|   ";
+		cout << "|       |" << "   ";
 	}
+	cout << endl;
 
 	for (int i = 0; i < Len; i++) {
-		cout << '|';
-		for (int j = 0; j < 8; j++) {
-			if (j == 1) {
-				cout << b->name;
-			}
-			else if (j == 6) {
-				cout << b->type;
-			}
-			else {
-				cout << ' ';
-			}
-		}
+		cout << "| " << setw(6) << left << b->summ << "|" << "   ";
 		b = b->Next;
-		cout << "|   ";
 	}
-
+	cout << endl;
 	b = a;
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < Len; j++) {
-			cout << '|';
-			for (int k = 0; k < 8; k++) {
-				cout << ' ';
-			}
-			cout << '|';
-		}
-	}
 
 	for (int i = 0; i < Len; i++) {
-		cout << '|';
-		for (int j = 0; j < 8; j++) {
-			if (j == 4) {
-				cout << b->type;
-			}
-			else {
-				cout << ' ';
-			}
-		}
-		b = b->Next;
-		cout << "|   ";
+		cout << "|       |" << "   ";
 	}
+	cout << endl;
 
+	for (int i = 0; i < Len; i++) {
+		cout << "|   " << b->type << "   |" << "   ";
+		b = b->Next;
+	}
+	cout << endl;
 	b = a;
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < Len; j++) {
-			cout << '|';
-			for (int k = 0; k < 8; k++) {
-				cout << ' ';
-			}
-			cout << '|';
-		}
-	}
 
 	for (int i = 0; i < Len; i++) {
-		cout << '|';
-		for (int j = 0; j < 8; j++) {
-			if (j == 6) {
-				cout << b->name;
-			}
-			else if (j == 1) {
-				cout << b->type;
-			}
-			else {
-				cout << ' ';
-			}
-		}
-		b = b->Next;
-		cout << "|   ";
+		cout << "|       |" << "   ";
 	}
+	cout << endl;
+
+	for (int i = 0; i < Len; i++) {
+		cout << "|" << setw(6) << right << b->summ << " |" << "   ";
+		b = b->Next;
+	}
+	cout << endl;
+
+	for (int i = 0; i < Len; i++) {
+		cout << "_________" << "   ";
+	}
+	cout << endl;
 }
 
-void TakeNewCard(int amount, Hold Cards, takes& Who) {
+void TakeNewCard(int amount, Hold& Cards, takes& Who) {
 	if (Who == NULL) {
 		int i = rand() % amount;
 		Hold a = Cards;
@@ -247,7 +218,11 @@ void TakeNewCard(int amount, Hold Cards, takes& Who) {
 		New->type = a->type;
 		New->summ = a->summ;
 		New->Next = NULL;
-		Who->Next = New;
+		takes WhoS = Who;
+		while (WhoS->Next != NULL) {
+			WhoS = Who->Next;
+		}
+		WhoS->Next = New;
 	}
 
 }
@@ -287,9 +262,31 @@ void TakeSpecialCard(takes& a, Hold& b) {
 	b->taken = true;
 }
 
+Hold TakeFirst(Hold& Cards) {
+	Hold a = Cards;
+	for (int i = 0; i < 52; i++) {
+		if (a->taken == false) {
+			a->taken = true;
+			return a;
+		}
+	}
+	return NULL;
+}
+
 Trees Chanses(Hold Cards, Trees TreeCh, Trees Curr) {
 	if (Curr == NULL) {
-
+		Hold Card = TakeFirst(Cards);
+		if (Card) {
+			Curr->names = TreeCh->names + Card->name;
+			Curr->types = TreeCh->types + Card->type;
+			Curr->summ = TreeCh->summ + Card->summ;
+			Curr->Next = NULL;
+			Curr->Down = NULL;
+			TreeCh->Down = Curr;
+		}
+		else {
+			return NULL;
+		}
 	}
 	if (Curr->summ >= 21) {
 		return NULL;
@@ -305,45 +302,105 @@ Trees Chanses(Hold Cards, Trees TreeCh, Trees Curr) {
 				NewTree->Next = NULL;
 				Curr->Next = NewTree;
 				Curr->Down = Chanses(Cards, Curr, Curr->Down);
+				Curr = NewTree;
 			}
 			a = a->Next;
 		}
 	}
 }
 
-float ChanseNext(takes Who, Trees TreeCh) {
-	int eightteen = 0, nineteen = 0, twenty = 0, twentyone = 0, more = 0, less = 0, all = 0;
-	Trees Crr = TreeCh;
-	Crr = Crr->Down;
-	while (Crr->Next != NULL) {
+void ChansesClear(Calc& Chanses) {
+	Chanses->eightteen = 0;
+	Chanses->nineteen = 0;
+	Chanses->twenty = 0;
+	Chanses->twentyone = 0;
+	Chanses->less = 0;
+	Chanses->more = 0;
+	Chanses->all = 0;
+}
+
+Calc ChanseNext(Trees Treech, Calc Chanses) {
+	Trees Crr = Treech;
+	ChansesClear(Chanses);
+	while (Crr != NULL) {
 		switch (Crr->summ)
 		{
-		case 18: eightteen++; break;
-		case 19: nineteen++; break;
-		case 20: twenty++; break;
-		case 21: twentyone++; break;
+		case 18: Chanses->eightteen++; break;
+		case 19: Chanses->nineteen++; break;
+		case 20: Chanses->twenty++; break;
+		case 21: Chanses->twentyone++; break;
 		default:
-			if (Crr->summ > 21) more++;
-			else less++;
+			if (Crr->summ > 21) Chanses->more++;
+			else Chanses->less++;
 			break;
 		}
-		all++;
+		Chanses->all++;
 		Crr = Crr->Next;
 	}
-	cout << "eightteen: " << eightteen << endl;
-	cout << "nineteen: " << nineteen << endl;
-	cout << "twenty: " << twenty << endl;
-	cout << "twentyone: " << twentyone << endl;
-	return (eightteen + nineteen + twenty + twentyone + less) / all;
+	return Chanses;
 }
 
 void ChanseAll(takes Who, Trees TreeCh) {
 
 }
 
+void DestroyPerson(takes Who) {
+	delete Who;
+}
+
+void DestroyTree(Trees a) {
+	if (a->Next != NULL) DestroyTree(a->Next);
+	if (a->Down != NULL) DestroyTree(a->Down);
+	delete a;
+}
+
+void DestroyHolder(Hold a) {
+	if (a->Next != NULL) DestroyHolder(a->Next);
+	delete a;
+}
+
+string NamesWho(takes a) {
+	string b = "";
+	while (a != NULL) {
+		b += a->name;
+		a = a->Next;
+	}
+	return b;
+}
+
+string TypesWho(takes a) {
+	string b = "";
+	while (a != NULL) {
+		b += a->type;
+		a = a->Next;
+	}
+	return b;
+}
+
+int SummWho(takes a) {
+	int b = 0;
+	while (a != NULL) {
+		b += a->summ;
+		a = a->Next;
+	}
+	return b;
+}
+
+string GetDiff(string a, string b) {
+	string c = "";
+	for (int i = a.length(); i < b.length(); i++) {
+		c += b[i];
+	}
+	return c;
+}
+
 void PlayGame(Hold Cards) {
+	srand(time(0));
 	takes Player = NULL;
 	takes Bot = NULL;
+	Calc ChanseA = new ChanseFor;
+	Trees TreeCh = NULL;
+	Trees Curr = NULL;
 	int amount = 52;
 	TakeNewCard(amount, Cards, Player);
 	amount--;
@@ -370,16 +427,82 @@ void PlayGame(Hold Cards) {
 			ShowCards(Player);
 		}
 		else if (Inp == "Help") {
+			if (TreeCh == NULL) {
+				TreeCh = new TakeTree;
+				TreeCh->names = NamesWho(Player);
+				TreeCh->summ = SummWho(Player);
+				TreeCh->types = TypesWho(Player);
+				TreeCh->Down = NULL;
+				TreeCh->Next = NULL;
+				Curr = TreeCh->Down;
+				system("pause");
+				TreeCh = Chanses(Cards, TreeCh, Curr);
+				system("pause");
+				cout << TreeCh->summ;
+				cout << ChanseA->eightteen << endl <<
+					ChanseA->nineteen << endl <<
+					ChanseA->twenty << endl <<
+					ChanseA->twentyone << endl <<
+					ChanseA->less << endl <<
+					ChanseA->more << endl <<
+					ChanseA->all << endl;
+			}
+			else {
+				Trees NewTreeCh = TreeCh;
+				Trees Buff = TreeCh;
+				string DiffOne = GetDiff(NamesWho(Player), TreeCh->names);
+				string DiffSec = GetDiff(TypesWho(Player), TreeCh->types);
+				int DiffS = -1;
 
+				while (DiffOne.length() != 0) {
+					DiffS++;
+					Buff = NewTreeCh->Down;
+					delete NewTreeCh;
+					TreeCh = Buff;
+					while (DiffOne[DiffS] != TreeCh->names[TreeCh->names.length() - 1] && 
+						DiffSec[DiffS] != TreeCh->types[TreeCh->types.length() - 1]) {
+						Buff = TreeCh->Next;
+						DestroyTree(TreeCh);
+						TreeCh = Buff;
+					}
+					NewTreeCh = TreeCh;
+					TreeCh = TreeCh->Next;
+					Buff = TreeCh;
+					while (TreeCh->Next != NULL) {
+						Buff = TreeCh->Next;
+						delete TreeCh;
+						TreeCh = Buff;
+					}
+					delete TreeCh;
+				}
+				Curr = NewTreeCh->Down;
+				NewTreeCh = Chanses(Cards, TreeCh, Curr);
+			}
+			ChanseA = ChanseNext(TreeCh, ChanseA);
+			cout << ChanseA->eightteen << endl <<
+				ChanseA->nineteen << endl <<
+				ChanseA->twenty << endl <<
+				ChanseA->twentyone << endl <<
+				ChanseA->less << endl <<
+				ChanseA->more << endl <<
+				ChanseA->all << endl;
 		}
 		else if (Inp != "No") {
 			cout << "Wrong input! Try again!" << endl;
 		}
+		if (GetSumm(Player) > 21) {
+			cout << "You lose!" << endl;
+			break;
+		}
 	}
-	if (GetSumm(Player) > 21) {
-		cout << "You lose!" << endl;
-	}
-	else {
+	DestroyTree(TreeCh);
+	DestroyPerson(Player);
+	DestroyPerson(Bot);
+}
 
-	}
+void main() {
+	Hold Cards;
+	HolderInic(Cards);
+	PlayGame(Cards);
+	DestroyHolder(Cards);
 }
