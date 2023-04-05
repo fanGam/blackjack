@@ -505,13 +505,13 @@ void PlayGame2() {
 		}
 		else if (Inp == "Help") {
 			ChanseA = ChanseNext(Smaller->Down, ChanseA);
-			cout << ChanseA->eightteen << endl <<
+			/*cout << ChanseA->eightteen << endl <<
 				ChanseA->nineteen << endl <<
 				ChanseA->twenty << endl <<
 				ChanseA->twentyone << endl <<
 				ChanseA->less << endl <<
 				ChanseA->more << endl <<
-				ChanseA->all << endl;
+				ChanseA->all << endl;*/
 			Summa = ChanseA->all - ChanseA->more;
 			cout << "Your chanse to get good -> " << (Summa / ChanseA->all) * 100 << "%" << endl;
 		}

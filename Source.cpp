@@ -15,8 +15,8 @@ void main() {
 	while (Inp != "Exit") {
 		cout << "Type what do you want to do!" << endl;
 		cout << "Play - to play a game!" << endl;
-		cout << "Sim1 - to simulate with chanses!" << endl;
-		cout << "Sim2 - to simulate with chanses with balance!" << endl;
+		cout << "Sim1 - to simulate with chances!" << endl;
+		cout << "Sim2 - to simulate with chances and balance!" << endl;
 		cout << "Exit - to exit" << endl;
 		cout << "-> ";
 		cin >> Inp;
@@ -46,7 +46,7 @@ void main() {
 			cout << "Type what chanse do you want to test:" << endl;
 			cout << "-> ";
 			cin >> Chan;
-			cout << "Type how many trys do you want:" << endl;
+			cout << "Type how many tries do you want:" << endl;
 			cout << "-> ";
 			cin >> Amount;
 			cout << "Type your start balanse" << endl;
