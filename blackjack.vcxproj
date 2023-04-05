@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="boothelp.cpp" />
     <ClCompile Include="funk.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
