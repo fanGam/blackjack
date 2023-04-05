@@ -243,7 +243,7 @@ void TakeNewCard(int amount, Hold& Cards, takes& Who) {
 		New->Next = NULL;
 		takes WhoS = Who;
 		while (WhoS->Next != NULL) {
-			WhoS = Who->Next;
+			WhoS = WhoS->Next;
 		}
 		WhoS->Next = New;
 	}
@@ -317,6 +317,7 @@ Hold ReInic(Hold Cards, Trees Curr) {
 void Chanses(Hold Cards, Trees& TreeCh) {
 	
 	if (TreeCh->summ > 21) {
+
 		return;
 	}
 	else {
@@ -395,9 +396,6 @@ Calc ChanseNext(Trees Treech, Calc Chanses) {
 	return Chanses;
 }
 
-void ChanseAll(takes Who, Trees TreeCh) {
-
-}
 
 void DestroyPerson(takes Who) {
 	delete Who;
@@ -412,6 +410,10 @@ void DestroyTree(Trees a) {
 void DestroyHolder(Hold a) {
 	if (a->Next != NULL) DestroyHolder(a->Next);
 	delete a;
+}
+
+void DestroyChanses(Calc c) {
+	delete c;
 }
 
 string NamesWho(takes a) {
@@ -448,111 +450,110 @@ string GetDiff(string a, string b) {
 	}
 	return c;
 }
+//
+//TreeChans Calcul(Hold a, takes b, TreeChans& c) {
+//	if (c->summ < 21) {
+//		c->less = new TreeChanses;
+//		c->less->summ = 0;
+//		c->eighteen = new TreeChanses;
+//		c->eighteen->summ = 0;
+//		c->nineteen = new TreeChanses;
+//		c->nineteen->summ = 0;
+//		c->twenty = new TreeChanses;
+//		c->twenty->summ = 0;
+//		c->twentyone = new TreeChanses;
+//		c->twentyone->summ = 0;
+//		c->more = new TreeChanses;
+//		c->more->summ = 0;
+//		for (int i = 0; i < 52; i++) {
+//			if (a->taken == false) {
+//				a->taken = true;
+//
+//				takes d = b;
+//				while (d->Next != NULL) {
+//					d = d->Next;
+//				}
+//				d->Next = new taken;
+//				d->Next->name = a->name;
+//				d->Next->summ = a->summ;
+//				d->Next->id = a->id;
+//				d->Next->type = a->type;
+//				d->Next->Next = NULL;
+//
+//				switch (c->summ + a->summ)
+//				{
+//				case 18: c->eighteen->summ++; c->eighteen = Calcul(a, b, c->eighteen); break;
+//				case 19: c->nineteen->summ++; c->nineteen = Calcul(a, b, c->nineteen); break;
+//				case 20: c->twenty->summ++; c->twenty = Calcul(a, b, c->twenty); break;
+//				case 21: c->twentyone->summ++; c->twentyone = Calcul(a, b, c->twentyone); break;
+//				default:
+//					if ((c->summ + a->summ) > 21) {
+//						c->more++; return NULL;
+//					}
+//					else {
+//						c->less++; c->less = Calcul(a, b, c->less);
+//					}
+//					break;
+//				}
+//			}
+//		}
+//	}
+//	else {
+//		return NULL;
+//	}
+//}
 
-TreeChans Calcul(Hold a, takes b, TreeChans& c) {
-	if (c->summ < 21) {
-		c->less = new TreeChanses;
-		c->less->summ = 0;
-		c->eighteen = new TreeChanses;
-		c->eighteen->summ = 0;
-		c->nineteen = new TreeChanses;
-		c->nineteen->summ = 0;
-		c->twenty = new TreeChanses;
-		c->twenty->summ = 0;
-		c->twentyone = new TreeChanses;
-		c->twentyone->summ = 0;
-		c->more = new TreeChanses;
-		c->more->summ = 0;
-		for (int i = 0; i < 52; i++) {
-			if (a->taken == false) {
-				a->taken = true;
-
-				takes d = b;
-				while (d->Next != NULL) {
-					d = d->Next;
-				}
-				d->Next = new taken;
-				d->Next->name = a->name;
-				d->Next->summ = a->summ;
-				d->Next->id = a->id;
-				d->Next->type = a->type;
-				d->Next->Next = NULL;
-
-				switch (c->summ + a->summ)
-				{
-				case 18: c->eighteen->summ++; c->eighteen = Calcul(a, b, c->eighteen); break;
-				case 19: c->nineteen->summ++; c->nineteen = Calcul(a, b, c->nineteen); break;
-				case 20: c->twenty->summ++; c->twenty = Calcul(a, b, c->twenty); break;
-				case 21: c->twentyone->summ++; c->twentyone = Calcul(a, b, c->twentyone); break;
-				default:
-					if ((c->summ + a->summ) > 21) {
-						c->more++; return NULL;
-					}
-					else {
-						c->less++; c->less = Calcul(a, b, c->less);
-					}
-					break;
-				}
-			}
-		}
-	}
-	else {
-		return NULL;
-	}
-}
-
-void PlayGame(Hold Cards) {
-	srand(time(0));
-	takes Player = NULL;
-	takes Bot = NULL;
-	Calc ChanseA = new ChanseFor;
-	TreeChans a = NULL;
-	int amount = 52;
-	TakeNewCard(amount, Cards, Player);
-	amount--;
-	TakeNewCard(amount, Cards, Player);
-	amount--;
-	TakeNewCard(amount, Cards, Bot);
-	amount--;
-	cout << "Bot have:" << endl;
-	ShowCards(Bot);
-	cout << "------------------------------" << endl;
-	cout << "You have:" << endl;
-	ShowCards(Player);
-	string Inp = "-";
-	while (Inp != "No") {
-		cout << "Do you want to take new card?" << endl;
-		cout << "Type |Yes| to take or |No| to stop or |Help| to calculate chanses!" << endl;
-		cout << "-> ";
-		cin >> Inp;
-		if (Inp == "Yes") {
-			TakeNewCard(amount, Cards, Player);
-			amount--;
-			cout << "Now you have:" << endl;
-			cout << endl;
-			ShowCards(Player);
-		}
-		else if (Inp == "Help") {
-
-			a = new TreeChanses;
-			a->summ = SummWho(Player);
-			Calcul(Cards, Player, a);
-			cout << a->eighteen->summ << endl;
-		}
-		else if (Inp != "No") {
-			cout << "Wrong input! Try again!" << endl;
-		}
-		if (GetSumm(Player) > 21) {
-			cout << "You lose!" << endl;
-			break;
-		}
-	}
-	DestroyPerson(Player);
-	DestroyPerson(Bot);
-}
+//void PlayGame(Hold Cards) {
+//	srand(time(0));
+//	takes Player = NULL;
+//	takes Bot = NULL;
+//	Calc ChanseA = new ChanseFor;
+//	TreeChans a = NULL;
+//	int amount = 52;
+//	TakeNewCard(amount, Cards, Player);
+//	amount--;
+//	TakeNewCard(amount, Cards, Player);
+//	amount--;
+//	TakeNewCard(amount, Cards, Bot);
+//	amount--;
+//	cout << "Bot have:" << endl;
+//	ShowCards(Bot);
+//	cout << "------------------------------" << endl;
+//	cout << "You have:" << endl;
+//	ShowCards(Player);
+//	string Inp = "-";
+//	while (Inp != "No") {
+//		cout << "Do you want to take new card?" << endl;
+//		cout << "Type |Yes| to take or |No| to stop or |Help| to calculate chanses!" << endl;
+//		cout << "-> ";
+//		cin >> Inp;
+//		if (Inp == "Yes") {
+//			TakeNewCard(amount, Cards, Player);
+//			amount--;
+//			cout << "Now you have:" << endl;
+//			cout << endl;
+//			ShowCards(Player);
+//		}
+//		else if (Inp == "Help") {
+//
+//			a = new TreeChanses;
+//			a->summ = SummWho(Player);
+//			Calcul(Cards, Player, a);
+//			cout << a->eighteen->summ << endl;
+//		}
+//		else if (Inp != "No") {
+//			cout << "Wrong input! Try again!" << endl;
+//		}
+//		if (GetSumm(Player) > 21) {
+//			cout << "You lose!" << endl;
+//			break;
+//		}
+//	}
+//	DestroyPerson(Player);
+//	DestroyPerson(Bot);
+//}
 
 void PlayGame2(Hold Cards) {
-	srand(time(0));
 	takes Player = NULL;
 	takes Bot = NULL;
 	Calc ChanseA = new ChanseFor;
@@ -560,6 +561,8 @@ void PlayGame2(Hold Cards) {
 	Trees Smaller = NULL;
 	int amount = 52;
 	float Summa;
+	string NamesTo;
+	string TypesTo;
 	TakeNewCard(amount, Cards, Player);
 	amount--;
 	TakeNewCard(amount, Cards, Player);
@@ -590,7 +593,9 @@ void PlayGame2(Hold Cards) {
 			TakeNewCard(amount, Cards, Player);
 			amount--;
 			Smaller = Smaller->Down;
-			while (Smaller->names != NamesWho(Player) && Smaller->types != TypesWho(Player)) {
+			NamesTo = NamesWho(Player);
+			TypesTo = TypesWho(Player);
+			while (Smaller->names != NamesTo && Smaller->types != TypesTo) {
 				Smaller = Smaller->Next;
 			}
 			cout << "Now you have:" << endl;
@@ -635,7 +640,9 @@ void PlayGame2(Hold Cards) {
 			ShowCards(Bot);
 			cout << "--------------" << endl;
 			Smaller = Smaller->Down;
-			while (Smaller->names != NamesWho(Bot) && Smaller->types != TypesWho(Bot)) {
+			NamesTo = NamesWho(Bot);
+			TypesTo = TypesWho(Bot);
+			while (Smaller->names != NamesTo && Smaller->types != TypesTo) {
 				Smaller = Smaller->Next;
 			}
 			ChanseA = ChanseNext(Smaller->Down, ChanseA);
@@ -648,19 +655,116 @@ void PlayGame2(Hold Cards) {
 			cout << "You win!" << endl;
 		}
 		DestroyTree(TreeCh);
+		DestroyChanses(ChanseA);
 		DestroyPerson(Player);
 		DestroyPerson(Bot);
 	}
 	else {
 		DestroyTree(TreeCh);
+		DestroyChanses(ChanseA);
 		DestroyPerson(Player);
 		DestroyPerson(Bot);
 	}
 }
 
+bool Simulation(Hold Cards, float Chan) {
+	takes Player = NULL;
+	takes Bot = NULL;
+	Calc ChanseA = new ChanseFor;
+	Trees TreeCh = NULL;
+	Trees Smaller = NULL;
+	int amount = 52;
+	float Summa = 1;
+	bool win;
+	string NamesTo;
+	string TypesTo;
+	TakeNewCard(amount, Cards, Player);
+	amount--;
+	TakeNewCard(amount, Cards, Player);
+	amount--;
+	TakeNewCard(amount, Cards, Bot);
+	amount--;
+	TreeCh = new TakeTree;
+	TreeCh->names = NamesWho(Player);
+	TreeCh->summ = SummWho(Player);
+	TreeCh->types = TypesWho(Player);
+	TreeCh->Down = NULL;
+	TreeCh->Next = NULL;
+	Chanses(Cards, TreeCh);
+	Smaller = TreeCh;
+	while (Chan < Summa) {
+		TakeNewCard(amount, Cards, Player);
+		amount--;
+		Smaller = Smaller->Down;
+		NamesTo = NamesWho(Player);
+		TypesTo = TypesWho(Player);
+		while (Smaller->names != NamesTo && Smaller->types != TypesTo) {
+			Smaller = Smaller->Next;
+		}
+		ChanseA = ChanseNext(Smaller->Down, ChanseA);
+		if (ChanseA->all == 0) {
+			break;
+		}
+		Summa = (ChanseA->all - ChanseA->more) / ChanseA->all;
+		if (GetSumm(Player) > 21) {
+			win = false;
+		}
+	}
+	if (GetSumm(Player) <= 21) {
+		DestroyTree(TreeCh);
+		TreeCh = new TakeTree;
+		TreeCh->names = NamesWho(Bot);
+		TreeCh->summ = SummWho(Bot);
+		TreeCh->types = TypesWho(Bot);
+		TreeCh->Down = NULL;
+		TreeCh->Next = NULL;
+		Chanses(Cards, TreeCh);
+		Smaller = TreeCh;
+		Summa = 1;
+		while (Summa > 0.4) {
+			TakeNewCard(amount, Cards, Bot);
+			amount--;
+			Smaller = Smaller->Down;
+			NamesTo = NamesWho(Bot);
+			TypesTo = TypesWho(Bot);
+			while (Smaller->names != NamesTo && Smaller->types != TypesTo) {
+				Smaller = Smaller->Next;
+			}
+			ChanseA = ChanseNext(Smaller->Down, ChanseA);
+			if (ChanseA->all == 0) {
+				break;
+			}
+			Summa = (ChanseA->all - ChanseA->more) / ChanseA->all;
+		}
+		if (GetSumm(Bot) >= GetSumm(Player) && GetSumm(Bot) <= 21) {
+			win = false;
+		}
+		else {
+			win = true;
+		}
+	}
+	DestroyTree(TreeCh);
+	DestroyChanses(ChanseA);
+	DestroyPerson(Player);
+	DestroyPerson(Bot);
+	return win;
+}
+
 void main() {
 	Hold Cards;
+	srand(time(0));
 	HolderInic(Cards);
-	PlayGame2(Cards);
+	int wins = 0;
+	for (float i = 0.3; i < 0.6; i += 0.01) {
+		wins = 0;
+		for (int i = 0; i < 100; i++) {
+			HolderInic(Cards);
+			if (Simulation(Cards, 0.3)) wins++;
+		}
+		cout << i << " has " << wins << "%" << endl;
+	}
+	/*for (int i = 0; i < 5; i++) {
+		PlayGame2(Cards);
+	}*/
 	DestroyHolder(Cards);
 }
