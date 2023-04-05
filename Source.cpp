@@ -27,7 +27,7 @@ void main() {
 			PlayGame2();
 		}
 		else if (Inp == "Sim1") {
-			cout << "Type what chanse do you want to test:" << endl;
+			cout << "Type what chanse do you want to test (0 - 1):" << endl;
 			cout << "-> ";
 			cin >> Chan;
 			cout << "Type how many tries do you want:" << endl;
@@ -46,7 +46,7 @@ void main() {
 			cout << "There is " << Bet * 100 << "% chanse to win" << endl;
 		}
 		else if (Inp == "Sim2") {
-			cout << "Type what chanse do you want to test:" << endl;
+			cout << "Type what chanse do you want to test (0 - 1):" << endl;
 			cout << "-> ";
 			cin >> Chan;
 			cout << "Type how many tries do you want:" << endl;
