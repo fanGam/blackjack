@@ -27,18 +27,6 @@ struct TakeTree {
 
 typedef TakeTree* Trees;
 
-struct TreeChanses {
-	int summ;
-	TreeChanses* less;
-	TreeChanses* eighteen;
-	TreeChanses* nineteen;
-	TreeChanses* twenty;
-	TreeChanses* twentyone;
-	TreeChanses* more;
-};
-
-typedef TreeChanses* TreeChans;
-
 struct Holder {
 	int id;
 	bool taken;
@@ -275,16 +263,6 @@ int GetSumm(takes a) {
 	}
 }
 
-void TakeSpecialCard(takes& a, Hold b, Hold c) {
-	for (int i = 0; i < 52; i++) {
-		if (b->name == c->name && b->type == c->type) {
-			b->taken = true;
-			return;
-		}
-		b = b->Next;
-	}
-}
-
 Hold TakeFirst(Hold Cards) {
 	Hold a = Cards;
 	for (int i = 0; i < 52; i++) {
@@ -317,7 +295,6 @@ Hold ReInic(Hold Cards, Trees Curr) {
 void Chanses(Hold Cards, Trees& TreeCh) {
 	
 	if (TreeCh->summ > 21) {
-
 		return;
 	}
 	else {

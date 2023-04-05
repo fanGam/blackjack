@@ -1,4 +1,6 @@
 #include <iostream>
+#include <random>
+#include <ctime>
 #include "Header.h"
 
 using namespace std;
@@ -6,6 +8,7 @@ using namespace std;
 void main() {
 	string Inp = "-";
 	int Bal;
+	srand(time(0));
 	int Amount;
 	int Wins = 0;
 	float Chan;
@@ -71,7 +74,7 @@ void main() {
 					NewBet *= Mull;
 				}
 				if (i % 10 == 0) {
-					cout << i << " attemps simulated! Your bal -> " << Bal << endl;
+					cout << i + 1 << " attemps simulated! Your bal -> " << Bal << endl;
 				}
 			}
 			Bet = Wins / (float)Amount;
